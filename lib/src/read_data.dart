@@ -139,8 +139,7 @@ abstract class BookSource {
 
   Future<Map<String, List<BookSentence>>> getData();
 
-  Future<Map<String, List<BookSentence>>> _read(
-      Stream<List<int>> source, String title, bool isSplit) async {
+  Future<Map<String, List<BookSentence>>> _read(Stream<List<int>> source, String title, bool isSplit) async {
     final Completer isFinish = Completer<void>();
     final Map<String, List<BookSentence>> result = {};
     List<BookSentence> sentences = List.empty(growable: true);
@@ -148,17 +147,14 @@ abstract class BookSource {
     try {
       int position = 0;
       int originalPosition = 0;
-      final RegExp chapterTitlePattern = RegExp(
-        r'^\s*((第\s*(?:[零一二两三四五六七八九十百千万]+|\d+)\s*章)|引子|((?:chapter|chap)\s*(?:[IVXLCDM]+|\d+)|(?:Prologue|Epilogue)))\s*',
-        caseSensitive: false,
-      );
-      // final RegExp chapterTitlePattern =
-      //     RegExp(r'^\s*((第\s*(?:[零一二两三四五六七八九十百千万]+|\d+)\s*章)|引子)\s*');
+      // final RegExp chapterTitlePattern = RegExp(
+      //   r'^\s*((第\s*(?:[零一二两三四五六七八九十百千万]+|\d+)\s*章)|引子|((?:chapter|chap)\s*(?:[IVXLCDM]+|\d+)|(?:Prologue|Epilogue)))\s*',
+      //   caseSensitive: false,
+      // );
 
       final RegExp chapterTitlePattern = RegExp(r'^(###|####)\s+\S.*');
 
-      source.transform(utf8.decoder).transform(const LineSplitter()).listen(
-          (String line) {
+      source.transform(utf8.decoder).transform(const LineSplitter()).listen((String line) {
         if (line.isNotEmpty) {
           if (isSplit && chapterTitlePattern.hasMatch(line)) {
             if (result.length == 1 && result.containsKey(title)) {
@@ -166,14 +162,13 @@ abstract class BookSource {
             }
             sentences = List.empty(growable: true);
             position = 0;
-            result[line.trim()] = sentences;
+            result[line.replaceAll("####", "").replaceAll("###", "").trim()] = sentences;
           } else {
             List<BookWord> words = List.empty(growable: true);
             for (int i = 0; i < line.length; i++) {
               words.add(BookWord(line[i], i));
             }
-            BookSentence sentence =
-                BookSentence(words, position, originalPosition);
+            BookSentence sentence = BookSentence(words, position, originalPosition);
             sentences.add(sentence);
             position++;
           }
@@ -331,17 +326,9 @@ class BookProgress {
   // 页面数据
   final BookPage? bookPage;
 
-  BookProgress(
-      this.chapterTitle,
-      this.chapterIndex,
-      this.pageIndex,
-      this.pageTotal,
-      this.sentenceIndex,
-      this.sentenceOriginalIndex,
-      this.wordIndex,
-      this.bookPage,
-      [this.interaction = false,
-      this.snapshot = false]);
+  BookProgress(this.chapterTitle, this.chapterIndex, this.pageIndex, this.pageTotal, this.sentenceIndex,
+      this.sentenceOriginalIndex, this.wordIndex, this.bookPage,
+      [this.interaction = false, this.snapshot = false]);
 
   static BookProgress zero = BookProgress("", 0, 0, 0, 0, 0, 0, null);
 
