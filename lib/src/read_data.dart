@@ -152,6 +152,11 @@ abstract class BookSource {
         r'^\s*((第\s*(?:[零一二两三四五六七八九十百千万]+|\d+)\s*章)|引子|((?:chapter|chap)\s*(?:[IVXLCDM]+|\d+)|(?:Prologue|Epilogue)))\s*',
         caseSensitive: false,
       );
+      // final RegExp chapterTitlePattern =
+      //     RegExp(r'^\s*((第\s*(?:[零一二两三四五六七八九十百千万]+|\d+)\s*章)|引子)\s*');
+
+      final RegExp chapterTitlePattern = RegExp(r'^(###|####)\s+\S.*');
+
       source.transform(utf8.decoder).transform(const LineSplitter()).listen(
           (String line) {
         if (line.isNotEmpty) {

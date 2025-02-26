@@ -123,6 +123,8 @@ class ReadControllerImpl implements ReadController {
   // 中文: 页面跳转
   IndexCallback? scrollToPageCallback;
 
+  final Map<int, int> chapterPageMap = {};
+
   //  ---------- inner end -------------
 
   ReadControllerImpl({
@@ -234,6 +236,9 @@ class ReadControllerImpl implements ReadController {
     _isLoadCompleter = true;
     resetCallback?.call();
     refreshCallback?.call();
+
+    chapterPageMap[chapterIndex] = bookDataList.length;
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       BookSource? cache = _chapterSourceList[chapterIndex - 1];
       if (cache != null) {

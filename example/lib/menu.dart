@@ -5,7 +5,7 @@ import 'package:flutter_read_example/setting.dart';
 class BookMenu extends StatefulWidget {
   final ReadController bookController;
 
-  const BookMenu({super.key, required this.bookController});
+  const  BookMenu({super.key, required this.bookController});
 
   @override
   State<StatefulWidget> createState() => _BookMenuState();
